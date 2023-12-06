@@ -31,3 +31,5 @@ C:\Users\ELENA UMANZOR\Desktop\Athena_activo_fijo\Athena_Activo_FijoAPI\Athena_A
 C:\Users\ELENA UMANZOR\Desktop\Athena_activo_fijo\Athena_Activo_FijoAPI\Athena_Activo_FijoAPI\obj\Debug\net7.0\Athena_Activo_FijoAPI.pdb
 C:\Users\ELENA UMANZOR\Desktop\Athena_activo_fijo\Athena_Activo_FijoAPI\Athena_Activo_FijoAPI\obj\Debug\net7.0\Athena_Activo_FijoAPI.genruntimeconfig.cache
 C:\Users\ELENA UMANZOR\Desktop\Athena_activo_fijo\Athena_Activo_FijoAPI\Athena_Activo_FijoAPI\obj\Debug\net7.0\ref\Athena_Activo_FijoAPI.dll
+C:\Users\ELENA UMANZOR\Desktop\Athena_activo_fijo\Athena_Activo_FijoAPI\Athena_Activo_FijoAPI\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\ELENA UMANZOR\Desktop\Athena_activo_fijo\Athena_Activo_FijoAPI\Athena_Activo_FijoAPI\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll

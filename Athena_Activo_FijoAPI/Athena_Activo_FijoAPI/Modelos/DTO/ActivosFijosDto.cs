@@ -8,7 +8,7 @@ namespace Athena_Activo_FijoAPI.Modelos.DTO
         [Required]
         public required string codigo { get; set; }
         [Required]
-        public required int  tipoActivoId { get; set; }
+        public required tipoActivo tipoActivo { get; set; }
         [Required]
         public required string Descipcion { get; set; }
     }
