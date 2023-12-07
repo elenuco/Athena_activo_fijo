@@ -9,7 +9,7 @@ namespace Athena_Activo_FijoAPI.Datos
 
         public AthenaDbContext(DbContextOptions<AthenaDbContext> options) : base(options) { }
 
-        public DbSet<TipoActivo> TipoActivo { get; set; }
+        public DbSet<Athena> Athena { get; set; }
     }
 
 }
