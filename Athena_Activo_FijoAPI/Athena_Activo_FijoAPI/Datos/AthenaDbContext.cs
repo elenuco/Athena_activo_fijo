@@ -3,12 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Athena_Activo_FijoAPI.Datos
 {
-    public class AthenaDbContext :DbContext
+    public class AthenaDbContext : DbContext
     {
-        public AthenaDbContext(DbContextOptions<AthenaDbContext> options) : base(options) 
-        {
-            
-        }
-        public DbSet<tipoActivo> tipo_activo {  get; set; }
+        public AthenaDbContext() { }
+
+        public AthenaDbContext(DbContextOptions<AthenaDbContext> options) : base(options) { }
+
+        public DbSet<TipoActivo> TipoActivo { get; set; }
     }
+
 }
