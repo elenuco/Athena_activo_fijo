@@ -5,7 +5,7 @@ namespace Athena_Activo_FijoAPI.Modelos
     public class ActivosFijos
     {
         [Key]
-        public int ID_tipo_activo {  get; set; }
+        public int ID_activo_fijo {  get; set; }
         [Required]
         public  string codigo { get; set; }
         [Required]
