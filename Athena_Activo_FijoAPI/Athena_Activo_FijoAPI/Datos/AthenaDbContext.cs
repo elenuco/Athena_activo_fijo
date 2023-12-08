@@ -10,6 +10,7 @@ namespace Athena_Activo_FijoAPI.Datos
         public AthenaDbContext(DbContextOptions<AthenaDbContext> options) : base(options) { }
 
         public DbSet<Athena> Athena { get; set; }
+        public DbSet<tipoActivo> TipoActivos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Athena>().HasData(
@@ -19,6 +20,13 @@ namespace Athena_Activo_FijoAPI.Datos
                     codigo = "MAC0002",
                     Descipcion="Laptop marca mac"
 
+                }
+                );
+            modelBuilder.Entity<tipoActivo>().HasData(
+                new tipoActivo()
+                {
+                    ID_tipo_activo = 1,
+                    nombre="tablet"
                 }
                 );
         }
