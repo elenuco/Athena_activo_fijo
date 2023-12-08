@@ -12,19 +12,20 @@ namespace Athena_Activo_FijoAPI.Controllers
     public class TipoActivoController : ControllerBase
     {
         private readonly ILogger<TipoActivoController> logger;
-        public TipoActivoController(ILogger<TipoActivoController> logger)
+        private readonly AthenaDbContext _db;
+        public TipoActivoController(ILogger<TipoActivoController> logger, AthenaDbContext db)
         {
 
             this.logger = logger;
-
+            _db = db;
         }
         [HttpGet]
         public ActionResult <IEnumerable<TipoActivoDto>>GetTipoActivos()
         {
             this.logger.LogInformation("Obtener los tipos de activos");
-            return Ok( TipoActivoStore.tipoActivoList);
+            return Ok(_db.TipoActivos.ToList());
         }
-        [HttpGet("ID_tipo_activo:int")]
+        [HttpGet("ID_tipo_activo:int", Name ="GetTipoActivos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -34,7 +35,7 @@ namespace Athena_Activo_FijoAPI.Controllers
                 this.logger.LogError("Error al traer los tipos de activos"+ ID_tipo_activo);
                 return BadRequest();
             }
-            var tipoActivo = TipoActivoStore.tipoActivoList.FirstOrDefault(Id => Id.ID_tipo_activo == ID_tipo_activo);
+            var tipoActivo = _db.TipoActivos.FirstOrDefault(Id => Id.ID_tipo_activo == ID_tipo_activo);
             if (tipoActivo == null)
             {
                 return NotFound();
