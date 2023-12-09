@@ -20,19 +20,20 @@ namespace Athena_Activo_FijoAPI.Controllers
             _db = db;
         }
         [HttpGet]
-        public ActionResult <IEnumerable<TipoActivoDto>>GetTipoActivos()
+        public ActionResult<IEnumerable<TipoActivoDto>> GetTipoActivos()
         {
             this.logger.LogInformation("Obtener los tipos de activos");
             return Ok(_db.TipoActivos.ToList());
         }
-        [HttpGet("ID_tipo_activo:int", Name ="GetTipoActivos")]
+        [HttpGet("ID_tipo_activo:int", Name = "GetTipoActivos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<TipoActivoDto> GetTipoActivos(int ID_tipo_activo) {
+        public ActionResult<TipoActivoDto> GetTipoActivos(int ID_tipo_activo)
+        {
             if (ID_tipo_activo == 0)
             {
-                this.logger.LogError("Error al traer los tipos de activos"+ ID_tipo_activo);
+                this.logger.LogError("Error al traer los tipos de activos" + ID_tipo_activo);
                 return BadRequest();
             }
             var tipoActivo = _db.TipoActivos.FirstOrDefault(Id => Id.ID_tipo_activo == ID_tipo_activo);
@@ -41,7 +42,7 @@ namespace Athena_Activo_FijoAPI.Controllers
                 return NotFound();
             }
             return Ok(tipoActivo);
-        
+
         }
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -53,36 +54,25 @@ namespace Athena_Activo_FijoAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (TipoActivoStore.tipoActivoList.FirstOrDefault(Tav=>Tav.nombre.ToLower()==tipoActivo.nombre.ToLower())!=null)
+            
+            if (_db.TipoActivos.FirstOrDefault(Tav => Tav.nombre.ToLower() == tipoActivo.nombre.ToLower()) != null)
             {
                 ModelState.AddModelError("NombreExiste", "¡El tipo Activo con ese nombre ya Existe");
                 return BadRequest(ModelState);
             }
-            try
+            if (tipoActivo.ID_tipo_activo>0)
             {
-                if (tipoActivo == null)
-                {
-                    return BadRequest(tipoActivo);
-                }
-
-                if (TipoActivoStore.tipoActivoList == null)
-                {
-                    TipoActivoStore.tipoActivoList = new List<TipoActivoDto>();
-                }
-
-                tipoActivo.ID_tipo_activo = ObtenerNuevoId();
-
-                TipoActivoStore.tipoActivoList.Add(tipoActivo);
-
-                return CreatedAtAction("GetTipoActivos", new { id = tipoActivo.ID_tipo_activo }, tipoActivo);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error interno: {ex.Message}");
-            }
+            tipoActivo model = new tipoActivo() { 
+            nombre = tipoActivo.nombre
+            };
+            _db.TipoActivos.Add(model);
+            _db.SaveChanges();
+            return CreatedAtRoute("GetVilla", new {ID_tipo_activo=tipoActivo.ID_tipo_activo},tipoActivo);
         }
 
-        private int ObtenerNuevoId()
+        protected int ObtenerNuevoId()
         {
             if (TipoActivoStore.tipoActivoList.Any())
             {
@@ -90,7 +80,7 @@ namespace Athena_Activo_FijoAPI.Controllers
             }
             else
             {
-                return 1; 
+                return 1;
             }
         }
 
@@ -100,29 +90,30 @@ namespace Athena_Activo_FijoAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteTipoActivo(int ID_tipo_activo)
         {
-            if (ID_tipo_activo==0)
+            if (ID_tipo_activo == 0)
             {
                 return BadRequest();
             }
-            var tipoActivos = TipoActivoStore.tipoActivoList.FirstOrDefault(TaD=>TaD.ID_tipo_activo== ID_tipo_activo);
-            if (tipoActivos==null)
+            var tipoActivos = _db.TipoActivos.FirstOrDefault(TaD => TaD.ID_tipo_activo == ID_tipo_activo);
+            if (tipoActivos == null)
             {
                 return NotFound();
             }
-            TipoActivoStore.tipoActivoList.Remove(tipoActivos);
+            _db.TipoActivos.Remove(tipoActivos);
+            _db.SaveChanges();
             return NoContent();
         }
 
         [HttpPatch("{ID_tipo_activo:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdatePartialTipoActivo(int ID_tipo_activo, JsonPatchDocument <TipoActivoDto> patchTipoActivo)
+        public IActionResult UpdatePartialTipoActivo(int ID_tipo_activo, JsonPatchDocument<TipoActivoDto> patchTipoActivo)
         {
-            if (patchTipoActivo == null || ID_tipo_activo==0)
+            if (patchTipoActivo == null || ID_tipo_activo == 0)
             {
                 return BadRequest();
             }
-            var TActivo=TipoActivoStore.tipoActivoList.FirstOrDefault(TaP=>TaP.ID_tipo_activo==ID_tipo_activo);
+            var TActivo = TipoActivoStore.tipoActivoList.FirstOrDefault(TaP => TaP.ID_tipo_activo == ID_tipo_activo);
             patchTipoActivo.ApplyTo(TActivo);
             if (!ModelState.IsValid)
             {
@@ -139,8 +130,14 @@ namespace Athena_Activo_FijoAPI.Controllers
             {
                 return BadRequest();
             }
-            var TActivo = TipoActivoStore.tipoActivoList.FirstOrDefault(TaP => TaP.ID_tipo_activo == ID_tipo_activo);
-            TActivo.nombre = tipoActivo.nombre;
+            //var TActivo = TipoActivoStore.tipoActivoList.FirstOrDefault(TaP => TaP.ID_tipo_activo == ID_tipo_activo);
+            //TActivo.nombre = tipoActivo.nombre;
+            tipoActivo modelo = new()
+            {
+                nombre = tipoActivo.nombre
+            };
+            _db.TipoActivos.Update(modelo);
+            _db.SaveChanges();
             return NoContent();
         }
     }
